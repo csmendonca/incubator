@@ -18,6 +18,7 @@
 
 namespace Phalcon\Test;
 
+use Phalcon\DiInterface;
 use Phalcon\Mvc\Model\Manager as PhModelManager;
 use Phalcon\Mvc\Model\Metadata\Memory as PhMetadataMemory;
 
@@ -25,8 +26,9 @@ abstract class ModelTestCase extends UnitTestCase
 {
     /**
      * This method is called before a test is executed.
+     * @param DiInterface $di
      */
-    protected function setUp()
+    protected function setUp(DiInterface $di = NULL)
     {
         parent::setUp();
 
@@ -45,6 +47,9 @@ abstract class ModelTestCase extends UnitTestCase
                 return new PhMetadataMemory();
             }
         );
+        //Included to use previously configured database
+        if(!is_null($di))
+            $this->di->set('db', $di->get('db'));
 
         // Set the connection to the db (defaults to mysql)
         $this->setDb();
